@@ -2,6 +2,7 @@ watch:
 	rm -rf target
 	npm install
 	$(MAKE) css
+	$(MAKE) html
 	./node_modules/.bin/shadow-cljs watch app
 
 release:
@@ -13,6 +14,10 @@ release:
 css:
 	mkdir -p target/css
 	node_modules/.bin/postcss src/css/app.css -o target/css/bundle.css
+
+html:
+	mkdir -p target
+	rsync -ia src/html/. target/.
 
 repl:
 	while ! test -f target/main.js; do date; sleep 1; done
