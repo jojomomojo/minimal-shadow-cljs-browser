@@ -4,13 +4,16 @@
             [reagent.dom :as rd]
             [re-frame.core :as rf]))
 
-(defonce b 3)
+(defonce b 0)
+
+(def style 
+  "bg-blue hover:bg-blue-light text-white font-bold py-2 px-4 my-10 mx-10 rounded")
 
 (defn increment [db _]
   (update-in db [:counter] (fnil inc b)))
 
 (defn increment2 [db _]
-  (update-in db [:counter] (fnil (fn [a] (+ a 1000)) b)))
+  (update-in db [:counter] (fnil (fn [a] (+ a 100)) b)))
 
 (defn decrement [db _]
   (update-in db [:counter] (fnil dec b)))
@@ -36,21 +39,21 @@
     [:span @(rf/subscribe [:counter])]]
 
    [:div {:style {:background-color "#fff"}}
-    [:button {:on-click #(rf/dispatch [:decrement])
+    [:h3 {:on-click #(rf/dispatch [:decrement])
               :style {:background-color "#000"}
-              :class "bg-blue hover:bg-blue-light text-white font-bold py-2 px-4 my-10 mx-10 rounded"} "-"]
-    [:button {:on-click #(rf/dispatch [:increment])
+              :class style} "-"]
+    [:h3 {:on-click #(rf/dispatch [:increment])
               :style {:background-color "#000"}
-              :class "bg-blue hover:bg-blue-light text-white font-bold py-2 px-4 my-10 mx-10 rounded"} "+"]
-    [:button {:on-click #(rf/dispatch [:increment2])
+              :class style} "+"]
+    [:h3 {:on-click #(rf/dispatch [:increment2])
               :style {:background-color "#000"}
-              :class "bg-blue hover:bg-blue-light text-white font-bold py-2 px-4 my-10 mx-10 rounded"} "++"]
-    [:button {:on-click #(rf/dispatch [:reset])
+              :class style} "+++"]
+    [:h3 {:on-click #(rf/dispatch [:reset])
               :style {:background-color "#000"}
-              :class "bg-blue hover:bg-blue-light text-white font-bold py-2 px-4 my-10 mx-10 rounded"} "0"]]
+              :class style} "0"]]
    ])
 
-(defn ^:dev/after-load start []
+(defn ^:dev/after-load mount []
   (rf/reg-event-db
     :increment
     increment)
@@ -78,4 +81,4 @@
 (defn main! []
   (println "[main]: loading")
 
-  (start))
+  (mount))
