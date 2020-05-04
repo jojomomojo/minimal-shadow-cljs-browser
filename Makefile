@@ -1,6 +1,6 @@
 watch:
-	npm install
 	rm -rf target
+	npm install
 	$(MAKE) css
 	./node_modules/.bin/shadow-cljs watch app
 
@@ -15,6 +15,8 @@ css:
 	node_modules/.bin/postcss src/css/app.css -o target/css/bundle.css
 
 repl:
+	while ! test -f target/main.js; do date; sleep 1; done
+	open http://localhost:8080
 	./node_modules/.bin/shadow-cljs cljs-repl app
 
 fixos:
