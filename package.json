@@ -1,18 +1,9 @@
 {
-  "name": "minimal-shadow-cljs-browser",
-  "version": "1.0.0",
+  "name": "defn",
+  "version": "0.0.1",
   "description": "",
   "main": "index.js",
-  "scripts": {
-    "watch": "shadow-cljs watch app",
-    "compile": "shadow-cljs compile app",
-    "release": "shadow-cljs release app",
-    "html": "mkdir -p target && cp assets/index.html target/",
-    "serve": "npm run html && http-server target/",
-    "del": "rm -r target/*",
-    "build": "npm run release && npm run html && npm run serve"
-  },
-  "author": "",
+  "author": "defn",
   "license": "MIT",
   "devDependencies": {
     "shadow-cljs": "2.8.83"

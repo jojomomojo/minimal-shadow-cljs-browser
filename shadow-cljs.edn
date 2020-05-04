@@ -1,4 +1,4 @@
-{:source-paths ["src", "assets"]
+{:source-paths ["src"]
 
  :dependencies
  [[reagent "0.10.0"]
@@ -28,7 +28,7 @@
                       refactor-nrepl.middleware/wrap-refactor
                       iced.nrepl/wrap-iced]}
 
- :dev-http {8080 ["target/", "assets/"]}
+ :dev-http {8080 ["target/", "src/html"]}
 
  :builds {:app {:target :browser
                 :output-dir "target/"
