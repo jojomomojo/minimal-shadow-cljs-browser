@@ -2,9 +2,7 @@
 
 Run in development:
 
-    make development
-
-`:dev-http` specifies that `target/` will be served at http://localhost:8080 .
+    make develop
 
 ### REPL
 

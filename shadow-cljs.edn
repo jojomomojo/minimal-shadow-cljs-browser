@@ -1,9 +1,16 @@
+{:source-paths ["src", "assets"]
 
-{:source-paths ["src"]
- :dependencies []
- :dev-http {8080 "target/"}
- :builds {:app {:output-dir "target/"
+ :dependencies
+ [[re-frame "0.10.7"]
+  [re-frisk "0.5.3"]
+  [reagent "0.10.0"]]
+
+ :dev-http {8080 ["target/", "assets/"]}
+
+ :builds {:app {:target :browser
+                :output-dir "target/"
                 :asset-path "."
-                :target :browser
                 :modules {:main {:init-fn app.main/main!}}
-                :devtools {:after-load app.main/reload!}}}}
+                :devtools {:after-load app.main/reload!
+                           :repl-init-ns app.main
+                           :repl-pprint true}}}}
