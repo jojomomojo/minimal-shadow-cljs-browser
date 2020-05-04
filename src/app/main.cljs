@@ -40,6 +40,34 @@
 
 (defn counter-view
   []
+  [:div {:class "px-10 py-10"}
+   [:h3 {:class "text-lg leading-6 font-medium text-gray-900"}
+      "Last 30 days"]
+    [:div {:class "mt-5 grid grid-cols-1 gap-5 sm:grid-cols-3"}
+      [:div {:class "bg-white overflow-hidden shadow rounded-lg"}
+       [:div {:class "px-4 py-5 sm:p-6"}
+        [:dl
+          [:dt {:class "text-sm leading-5 font-medium text-gray-500 truncate"} 
+            "Total Subscribers"]
+          [:dd {:class "mt-1 text-3xl leading-9 font-semibold text-gray-900"} 
+            @(rf/subscribe [:counter])]]]]
+      [:div {:class "bg-white overflow-hidden shadow rounded-lg"}
+       [:div {:class "px-4 py-5 sm:p-6"}
+        [:dl
+          [:dt {:class "text-sm leading-5 font-medium text-gray-500 truncate"} 
+            "Total Subscribers"]
+          [:dd {:class "mt-1 text-3xl leading-9 font-semibold text-gray-900"} 
+            "71,897"]]]]
+      [:div {:class "bg-white overflow-hidden shadow rounded-lg"}
+       [:div {:class "px-4 py-5 sm:p-6"}
+        [:dl
+          [:dt {:class "text-sm leading-5 font-medium text-gray-500 truncate"} 
+            "Total Subscribers"]
+          [:dd {:class "mt-1 text-3xl leading-9 font-semibold text-gray-900"} 
+            "71,897"]]]]
+      ]])
+
+(defn meh []
   [:div
    [:h2 "Counter"]
    [:div
@@ -57,8 +85,7 @@
           :class style} "+++"]
     [:h3 {:on-click #(rf/dispatch [:reset])
           :style {:background-color "#000"}
-          :class style} "0"]]
-   ])
+          :class style} "0"]]])
 
 (defn ^:dev/after-load reload! []
   (rf/reg-event-db

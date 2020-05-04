@@ -18,6 +18,7 @@
     "shadow-cljs": "2.8.83"
   },
   "dependencies": {
+    "@tailwindcss/ui": "^0.3.0",
     "create-react-class": "^15.6.3",
     "css-loader": "^3.5.2",
     "lost": "^8.3.1",
