@@ -33,7 +33,7 @@
  :builds {:app {:target :browser
                 :output-dir "target/"
                 :asset-path "."
-                :compiler-options {:optimizations :simple}
+              ; :compiler-options {:optimizations :simple}
                 :modules {:main {:init-fn app.main/main!}}
                 :devtools {:repl-init-ns app.main
                            :repl-pprint true}}}}
