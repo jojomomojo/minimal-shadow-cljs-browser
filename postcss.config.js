@@ -3,6 +3,5 @@ module.exports = {
     require('postcss-import'),
     require('tailwindcss'),
     require('postcss-preset-env')({ stage: 1 }),
-    require('autoprefixer'),
   ]
 }
