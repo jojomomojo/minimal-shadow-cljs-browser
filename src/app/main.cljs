@@ -6,30 +6,20 @@
 
 (defonce b 3)
 
-(rf/reg-event-db
- :increment
- (fn [db _]
-   (update-in db [:counter] (fnil inc b))))
+(defn increment [db _]
+  (update-in db [:counter] (fnil inc b)))
 
-(rf/reg-event-db
- :increment2
- (fn [db _]
-   (update-in db [:counter] (fnil (fn [a] (+ a 100)) b))))
+(defn increment2 [db _]
+  (update-in db [:counter] (fnil (fn [a] (+ a 1000)) b)))
 
-(rf/reg-event-db
- :decrement
- (fn [db _]
-   (update-in db [:counter] (fnil dec b))))
+(defn decrement [db _]
+  (update-in db [:counter] (fnil dec b)))
 
-(rf/reg-event-db
- :reset
- (fn [db _]
-   (update-in db [:counter] #(identity b))))
+(defn reset [db _]
+  (update-in db [:counter] #(identity b)))
 
-(rf/reg-sub
- :counter
- (fn [db _]
-   (get-in db [:counter] b)))
+(defn counter [db _]
+  (get-in db [:counter] b))
 
 (defn button [icon msg style]
   [:button
@@ -57,14 +47,35 @@
               :class "bg-blue hover:bg-blue-light text-white font-bold py-2 px-4 my-10 mx-10 rounded"} "++"]
     [:button {:on-click #(rf/dispatch [:reset])
               :style {:background-color "#000"}
-              :class "bg-blue hover:bg-blue-light text-white font-bold py-2 px-4 my-10 mx-10 rounded"} "reset!!!"]]
+              :class "bg-blue hover:bg-blue-light text-white font-bold py-2 px-4 my-10 mx-10 rounded"} "0"]]
    ])
 
 (defn ^:dev/after-load start []
+  (rf/reg-event-db
+    :increment
+    increment)
+
+  (rf/reg-event-db
+    :increment2
+    increment2)
+
+  (rf/reg-event-db
+    :decrement
+    decrement)
+
+  (rf/reg-event-db
+    :reset
+    reset)
+
+  (rf/reg-sub
+    :counter
+    counter)
+
   (rd/render
-   [counter-view]
-   (js/document.getElementById "app")))
+    [counter-view]
+    (js/document.getElementById "app")))
 
 (defn main! []
   (println "[main]: loading")
+
   (start))
