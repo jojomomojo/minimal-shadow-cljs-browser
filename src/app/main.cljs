@@ -60,7 +60,7 @@
           :class style} "0"]]
    ])
 
-(defn reload! []
+(defn ^:dev/after-load reload! []
   (rf/reg-event-db
     :increment
     increment)
