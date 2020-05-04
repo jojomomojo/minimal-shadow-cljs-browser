@@ -8,6 +8,7 @@ release:
 	rm -rf target
 	env NODE_ENV=production $(MAKE) css
 	./node_modules/.bin/shadow-cljs release app
+	rsync -ia src/html/. target/.
 
 css:
 	mkdir -p target/css

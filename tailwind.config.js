@@ -11,9 +11,13 @@ module.exports = {
   plugins: [
     require('@tailwindcss/ui'),
   ],
-  purge: [
-    './src/**/*.html',
-    './src/**/*.cljs',
-  ],
+  purge: {
+    content: [
+      './src/**/*.html',
+      './src/**/*.cljs',
+    ],
+    options: {
+      whitelist: ['save-this-style'],
+    }
+  },
 }
-
