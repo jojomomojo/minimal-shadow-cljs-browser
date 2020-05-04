@@ -19,9 +19,12 @@ html:
 	mkdir -p target
 	rsync -ia src/html/. target/.
 
+serve:
+	cd target && caddy run
+
 repl:
 	while ! test -f target/main.js; do date; sleep 1; done
-	open http://localhost:8080
+	open http://localhost:2019
 	./node_modules/.bin/shadow-cljs cljs-repl app
 
 fixos:
