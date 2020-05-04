@@ -1,4 +1,4 @@
-develop: 
+watch:
 	npm install
 	rm -rf target
 	$(MAKE) css
