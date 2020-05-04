@@ -20,7 +20,7 @@
   (update-in db [:counter] (fnil inc b)))
 
 (defn increment2 [db _]
-  (update-in db [:counter] (fnil (fn [a] (+ a 100)) b)))
+  (update-in db [:counter] (fnil (fn [a] (+ a 300)) b)))
 
 (defn decrement [db _]
   (update-in db [:counter] (fnil dec b)))
@@ -60,7 +60,7 @@
           :class style} "0"]]
    ])
 
-(defn ^:dev/after-load mount []
+(defn reload! []
   (rf/reg-event-db
     :increment
     increment)
@@ -88,4 +88,4 @@
 (defn main! []
   (println "[main]: loading")
 
-  (mount))
+  (reload!))

@@ -1,5 +1,7 @@
-develop: static
+develop: 
 	npm install
+	rm -rf target
+	$(MAKE) static
 	./node_modules/.bin/shadow-cljs watch app
 
 repl:
