@@ -1,24 +1,20 @@
 develop: 
 	npm install
 	rm -rf target
-	$(MAKE) static
+	$(MAKE) css
 	./node_modules/.bin/shadow-cljs watch app
 
-repl:
-	./node_modules/.bin/shadow-cljs cljs-repl app
-
-static: css
-	true
+release:
+	rm -rf target
+	env NODE_ENV=production $(MAKE) css
+	./node_modules/.bin/shadow-cljs release app
 
 css:
 	mkdir -p target/css
 	node_modules/.bin/postcss src/css/app.css -o target/css/bundle.css
 
-release:
-	rm -rf target
-	mkdir -p target
-	./node_modules/.bin/shadow-cljs release app
-	npm run serve
+repl:
+	./node_modules/.bin/shadow-cljs cljs-repl app
 
 fixos:
 	@echo run manually:

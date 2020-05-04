@@ -10,5 +10,10 @@ module.exports = {
   },
   plugins: [
     require('@tailwindcss/ui'),
-  ]
+  ],
+  purge: [
+    './src/**/*.html',
+    './src/**/*.cljs',
+  ],
 }
+
