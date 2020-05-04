@@ -7,16 +7,12 @@ develop:
 repl:
 	./node_modules/.bin/shadow-cljs cljs-repl app
 
-static: css js
+static: css
 	true
 
 css:
 	mkdir -p target/css
 	node_modules/.bin/postcss src/css/app.css -o target/css/bundle.css
-
-js:
-	mkdir -p target/js
-	node_modules/.bin/webpack
 
 release:
 	rm -rf target
