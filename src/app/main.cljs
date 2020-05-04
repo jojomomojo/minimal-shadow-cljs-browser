@@ -9,7 +9,7 @@
       (fn register-handler
         [kind id handler-fn]
         (swap! re-frame.registrar/kind->id->handler assoc-in [kind id] handler-fn)
-        handler-fn) )
+        handler-fn))
 
 (defonce b 0)
 
@@ -41,7 +41,7 @@
 (defn counter-view
   []
   [:div
-   [:h2 "Counter..."]
+   [:h2 "Counter"]
    [:div
     [:span @(rf/subscribe [:counter])]]
 
