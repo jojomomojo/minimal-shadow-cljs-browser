@@ -4,6 +4,13 @@
             [reagent.dom :as rd]
             [re-frame.core :as rf]))
 
+; https://github.com/Day8/re-frame/issues/204#issuecomment-482961679
+(set! (.-re_frame.registrar.register_handler js/window)
+      (fn register-handler
+        [kind id handler-fn]
+        (swap! re-frame.registrar/kind->id->handler assoc-in [kind id] handler-fn)
+        handler-fn) )
+
 (defonce b 0)
 
 (def style 
@@ -40,17 +47,17 @@
 
    [:div {:style {:background-color "#fff"}}
     [:h3 {:on-click #(rf/dispatch [:decrement])
-              :style {:background-color "#000"}
-              :class style} "-"]
+          :style {:background-color "#000"}
+          :class style} "-"]
     [:h3 {:on-click #(rf/dispatch [:increment])
-              :style {:background-color "#000"}
-              :class style} "+"]
+          :style {:background-color "#000"}
+          :class style} "+"]
     [:h3 {:on-click #(rf/dispatch [:increment2])
-              :style {:background-color "#000"}
-              :class style} "+++"]
+          :style {:background-color "#000"}
+          :class style} "+++"]
     [:h3 {:on-click #(rf/dispatch [:reset])
-              :style {:background-color "#000"}
-              :class style} "0"]]
+          :style {:background-color "#000"}
+          :class style} "0"]]
    ])
 
 (defn ^:dev/after-load mount []
