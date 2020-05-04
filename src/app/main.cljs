@@ -4,13 +4,6 @@
             [reagent.dom :as rd]
             [re-frame.core :as rf]))
 
-; https://github.com/Day8/re-frame/issues/204#issuecomment-482961679
-;(set! (.-re_frame.registrar.register_handler js/window)
-;      (fn register-handler
-;        [kind id handler-fn]
-;        (swap! re-frame.registrar/kind->id->handler assoc-in [kind id] handler-fn)
-;        handler-fn))
-
 (defonce b 0)
 
 (defn increment [db _]
@@ -40,24 +33,44 @@
           [:dt {:class "text-sm leading-5 font-medium text-gray-500 truncate"} 
             "Total Subscribers"]
           [:dd {:class "mt-1 text-3xl leading-9 font-semibold text-gray-900"} 
-            "111"]]]]
+            @(rf/subscribe [:counter])]]]]
       [:div {:class "bg-white overflow-hidden shadow rounded-lg"}
        [:div {:class "px-4 py-5 sm:p-6"}
         [:dl
           [:dt {:class "text-sm leading-5 font-medium text-gray-500 truncate"} 
             "Total Subscribers"]
           [:dd {:class "mt-1 text-3xl leading-9 font-semibold text-gray-900"} 
-            "71,897"]]]]
+            @(rf/subscribe [:counter])]]]]
       [:div {:class "bg-white overflow-hidden shadow rounded-lg"}
        [:div {:class "px-4 py-5 sm:p-6"}
         [:dl
           [:dt {:class "text-sm leading-5 font-medium text-gray-500 truncate"} 
             "Total Subscribers"]
           [:dd {:class "mt-1 text-3xl leading-9 font-semibold text-gray-900"} 
-            "71,897"]]]]
+            @(rf/subscribe [:counter])]]]]
       ]])
 
 (defn ^:dev/after-load reload! []
+  (rf/reg-event-db
+    :increment
+    increment)
+
+  (rf/reg-event-db
+    :increment2
+    increment2)
+
+  (rf/reg-event-db
+    :decrement
+    decrement)
+
+  (rf/reg-event-db
+    :reset
+    reset)
+
+  (rf/reg-sub
+    :counter
+    counter)
+
   (rd/render
     [counter-view]
     (js/document.getElementById "app")))
@@ -66,3 +79,6 @@
   (println "[main]: loading")
 
   (reload!))
+
+(defn bump []
+  (rf/dispatch [:increment2]))
