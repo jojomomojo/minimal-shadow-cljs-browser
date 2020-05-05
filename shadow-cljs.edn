@@ -29,11 +29,9 @@
                       iced.nrepl/wrap-iced]}
  :ssl {}
 
- :http {:port 9630
-        :host "repl.whoa.bot"}
+ :http {:port 9630}
 
- :dev-http {8080 {:roots ["target/", "src/html"]
-                  :host "repl.whoa.bot"}}
+ :dev-http {8080 {:roots ["target/", "src/html"]}}
 
  :builds {:app {:target :browser
                 :output-dir "target/"
