@@ -28,8 +28,7 @@
                       refactor-nrepl.middleware/wrap-refactor
                       iced.nrepl/wrap-iced]}
 
- :http {:port 9630
-        :host "app.whoa.bot"}
+ :http {:port 9630}
 
  :dev-http {8080 ["target/", "src/html"]}
 
