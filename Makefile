@@ -31,3 +31,6 @@ fixos:
 	@echo sudo rm -r -f /Library/Developer/CommandLineTools
 	@echo xcode-select --install
 	@echo sudo xcode-select --switch /Library/Developer/CommandLineTools
+
+bash:
+	@docker-compose exec -w /app/src/work/app app ../../env bash

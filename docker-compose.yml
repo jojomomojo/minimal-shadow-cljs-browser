@@ -1,0 +1,14 @@
+version: '3.7'
+services:
+  app:
+    image: defn/home
+    entrypoint: [ "sleep", "86400000" ]
+    volumes:
+      - .:/app/src/work/app
+      - ${HOME}/.m2:/app/src/.m2
+    ports:
+      - 8080
+      - 9630:9630
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.app.rule=Host(`app.whoa.bot`)"
