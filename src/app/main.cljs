@@ -161,9 +161,7 @@
       [:div {:class "px-10"}
        [:h3 {:class "py-5 text-lg leading-6 font-medium text-gray-900"}
         "Memory Game"]
-       ; win status
-       (if (won-game?)
-         [:h2 {:class "py-5 text-lg leading-6 font-medium text-gray-900"} "You won!!!"])
+
        ; the gameboard
        [:div {:class "py-5"}
         [:table#gameboard [:tbody
@@ -171,12 +169,17 @@
                            (map-indexed
                              (fn [idx row] ^{:key idx} [board-row row])
                              (partition 4 cells))]]]
+
        ; the buttons
        [:div {:class "px-5"}
         [:a {:on-click #(new-game)
              :href "#"} "[restart]"]
         [:a {:on-click #(win-game)
              :href "#"} "[cheat]"]]
+
+       ; win status
+       (if (won-game?)
+         [:h2 {:class "px-5 py-5 text-lg leading-6 font-medium text-gray-900"} "You won!!!"])
        ])))
 
 ;-- main ---------------------------------------------------------------------------
