@@ -160,11 +160,7 @@
     (let [cells (vals @gameboard)]
       [:div {:class "px-10"}
        [:h3 {:class "py-5 text-lg leading-6 font-medium text-gray-900"}
-        "The Memory Game "
-        [:a {:on-click #(new-game)
-             :href "#"} "[restart]"]
-        [:a {:on-click #(win-game)
-             :href "#"} "[cheat]"]]
+        "Memory Game"]
        ; win status
        (if (won-game?)
          [:h2 {:class "py-5 text-lg leading-6 font-medium text-gray-900"} "You won!!!"])
@@ -174,7 +170,14 @@
                            ; taking 4 cells at a time for each row
                            (map-indexed
                              (fn [idx row] ^{:key idx} [board-row row])
-                             (partition 4 cells))]]]])))
+                             (partition 4 cells))]]]
+       ; the buttons
+       [:div {:class "px-5"}
+        [:a {:on-click #(new-game)
+             :href "#"} "[restart]"]
+        [:a {:on-click #(win-game)
+             :href "#"} "[cheat]"]]
+       ])))
 
 ;-- main ---------------------------------------------------------------------------
 (defn ^:dev/after-load reload! []
