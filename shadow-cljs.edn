@@ -36,8 +36,12 @@
  :builds {:app {:target :browser
                 :output-dir "target/"
                 :asset-path "."
-              ; :compiler-options {:optimizations :simple}
+                :compiler-options {:optimizations :none}
                 :modules {:main {:init-fn app.main/main!}}
                 :devtools {:repl-init-ns app.main
-                           :repl-pprint true}}}}
+                           :repl-pprint true}}
+          :app-release {:target :browser
+                        :output-dir "release"
+                        :asset-path "."
+                        :modules {:main {:init-fn app.main/main!}}}}}
 
