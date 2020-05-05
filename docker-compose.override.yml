@@ -15,10 +15,10 @@ services:
       - "traefik.http.routers.repl.entrypoints=repl"
       - "traefik.http.routers.repl.rule=Host(`app.whoa.bot`)"
       - "traefik.http.routers.repl.middlewares=sslheader@docker"
-  www:
+  a:
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.wwwk.rule=Host(`www.whoa.bot`)"
+      - "traefik.http.routers.a.rule=Host(`a.whoa.bot`)"
 
 networks:
   default:
