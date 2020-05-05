@@ -78,6 +78,11 @@
   (and (= (/ (count @gameboard) 2) (count @matched))
        (not= (count @matched) 0)))
 
+(defn win-game
+  []
+  (doseq [cell (range 1 9)]
+   (swap! matched conj cell)))
+
 (defn add-cell [n]
   ; add a numbered cell with a unique id
   (let [id (swap! score inc)]
@@ -156,9 +161,10 @@
       [:div {:class "px-10"}
        [:h3 {:class "py-5 text-lg leading-6 font-medium text-gray-900"}
         "The Memory Game "
-        [:a {:class "new-game"
-             :on-click #(new-game)
-             :href "#"} "[restart]"]]
+        [:a {:on-click #(new-game)
+             :href "#"} "[restart]"]
+        [:a {:on-click #(win-game)
+             :href "#"} "[cheat]"]]
        ; win status
        (if (won-game?)
          [:h2 {:class "py-5 text-lg leading-6 font-medium text-gray-900"} "You won!!!"])
