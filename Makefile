@@ -4,6 +4,9 @@ start:
 repl:
 	@docker-compose exec -w /app/src/work/app app ../../env make cljs-repl
 
+bundle:
+	@docker-compose exec -w /app/src/work/app app ../../env make release
+
 init:
 	@docker-compose exec app make fixroot 2>/dev/null 1>/dev/null || true
 	@docker-compose exec -w /app/src/work/app app ../../env make install
@@ -19,9 +22,11 @@ watch:
 
 release:
 	rm -rf target
-	env NODE_ENV=production $(MAKE) css
+	env NODE_ENV=production $(MAKE) static
 	./node_modules/.bin/shadow-cljs release app
-	rsync -ia src/html/. target/.
+
+static:
+	$(MAKE) css html
 
 css:
 	mkdir -p target/css
