@@ -1,0 +1,17 @@
+mkdir ssl
+cd ssl
+
+echo '01' > serial && touch index.txt
+vi caconfig.cnf
+export OPENSSL_CONF=caconfig.cnf
+openssl req -x509 -newkey rsa:2048 -out cacert.pem -outform PEM -days 1825
+openssl x509 -in cacert.pem -out cacert.crt
+vi localhost.cnf
+export OPENSSL_CONF=localhost.cnf
+openssl req -newkey rsa:2048 -keyout tempkey.pem -keyform PEM -out tempreq.pem -outform PEM
+openssl rsa < tempkey.pem > server_key.pem
+export OPENSSL_CONF=caconfig.cnf
+openssl ca -in tempreq.pem -out server_crt.pem
+cat server_key.pem server_crt.pem > hold.pem
+openssl pkcs12 -export -out localhost.pfx -in hold.pem -name "InvoiceSmash Dev Self-Signed SSL Certificate"
+keytool -importkeystore -destkeystore keystore.jks -srcstoretype PKCS12 -srckeystore localhost.pfx

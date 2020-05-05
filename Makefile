@@ -37,6 +37,7 @@ bash:
 
 start:
 	@docker-compose exec app make fixroot 2>/dev/null 1>/dev/null || true
+	@echo 0.0.0.0 repl.whoa.bot | docker-compose exec -T app sudo tee -a /etc/hosts
 	@docker-compose exec -w /app/src/work/app app ../../env make
 
 debug:

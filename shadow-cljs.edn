@@ -27,10 +27,13 @@
                       cider.nrepl/wrap-xref
                       refactor-nrepl.middleware/wrap-refactor
                       iced.nrepl/wrap-iced]}
+ :ssl {}
 
- :http {:port 9630}
+ :http {:port 9630
+        :host "repl.whoa.bot"}
 
- :dev-http {8080 ["target/", "src/html"]}
+ :dev-http {8080 {:roots ["target/", "src/html"]
+                  :host "repl.whoa.bot"}}
 
  :builds {:app {:target :browser
                 :output-dir "target/"
