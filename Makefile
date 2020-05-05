@@ -34,3 +34,10 @@ fixos:
 
 bash:
 	@docker-compose exec -w /app/src/work/app app ../../env bash
+
+start:
+	@docker-compose exec app make fixroot 2>/dev/null 1>/dev/null || true
+	@docker-compose exec -w /app/src/work/app app ../../env make
+
+debug:
+	@docker-compose exec -w /app/src/work/app app ../../env make repl
