@@ -20,7 +20,7 @@ html:
 	rsync -ia src/html/. target/.
 
 serve:
-	cd target && caddy file-server -listen 0.0.0.0:8080
+	cd target && caddy file-server -listen 0.0.0.0:8888
 
 repl:
 	while ! test -f target/main.js; do date; sleep 1; done
