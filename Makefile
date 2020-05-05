@@ -1,3 +1,5 @@
+.PHONY: release
+
 start:
 	@docker-compose exec -w /app/src/work/app app ../../env make watch
 
