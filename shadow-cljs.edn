@@ -27,11 +27,11 @@
                       cider.nrepl/wrap-xref
                       refactor-nrepl.middleware/wrap-refactor
                       iced.nrepl/wrap-iced]}
+
  :ssl {}
-
- :http {:port 9630}
-
- :dev-http {8080 {:roots ["target/", "src/html"]}}
+ 
+ :http {:port 9631
+        :ssl-port 9630}
 
  :builds {:app {:target :browser
                 :output-dir "target/"
