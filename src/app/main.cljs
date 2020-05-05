@@ -162,20 +162,25 @@
        [:h3 {:class "py-5 text-lg leading-6 font-medium text-gray-900"}
         "Memory Game"]
 
-       ; the gameboard
-       [:div {:class "py-5"}
-        [:table#gameboard [:tbody
-                           ; taking 4 cells at a time for each row
-                           (map-indexed
-                             (fn [idx row] ^{:key idx} [board-row row])
-                             (partition 4 cells))]]]
-
-       ; the buttons
        [:div {:class "px-5"}
-        [:a {:on-click #(new-game)
-             :href "#"} "[restart]"]
-        [:a {:on-click #(win-game)
-             :href "#"} "[cheat]"]]
+        [:div {:class "mt-5 grid grid-cols-1 gap-5 sm:grid-cols-3"}
+         ; the gameboard
+         [:div {:class "py-5"}
+          [:table#gameboard [:tbody
+                             ; taking 4 cells at a time for each row
+                             (map-indexed
+                               (fn [idx row] ^{:key idx} [board-row row])
+                               (partition 4 cells))]]]
+         ; the buttons
+         [:div {:class "bg-white overflow-hidden shadow rounded-lg"}
+          [:div {:class "px-4 py-5"}
+            [:a {:on-click #(new-game) :href "#"}
+             "restart"]]]
+         [:div {:class "bg-white overflow-hidden shadow rounded-lg"}
+          [:div {:class "px-4 py-5"}
+           [:a {:on-click #(win-game) :href "#"}
+            "cheat"]]]
+         ]]
 
        ; win status
        (if (won-game?)
