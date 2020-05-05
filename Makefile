@@ -20,11 +20,10 @@ html:
 	rsync -ia src/html/. target/.
 
 serve:
-	cd target && caddy file-server
+	cd target && caddy file-server -listen 0.0.0.0:8080
 
 repl:
 	while ! test -f target/main.js; do date; sleep 1; done
-	open http://localhost
 	./node_modules/.bin/shadow-cljs cljs-repl app
 
 fixos:
