@@ -22,8 +22,11 @@ watch:
 
 release:
 	rm -rf target
+	rm -rf release
+	mkdir -p release
 	env NODE_ENV=production $(MAKE) static
 	./node_modules/.bin/shadow-cljs release app
+	rsync -ia target/. release/.
 
 static:
 	$(MAKE) css html

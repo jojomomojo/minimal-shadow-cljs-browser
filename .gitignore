@@ -1,7 +1,6 @@
-
 /target
+/release
 /node_modules
 /*.log
 .shadow-cljs/
-
 .nrepl-port
