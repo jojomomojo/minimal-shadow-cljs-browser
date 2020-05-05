@@ -6,7 +6,7 @@
   "author": "defn",
   "license": "MIT",
   "devDependencies": {
-    "shadow-cljs": "2.8.83"
+    "shadow-cljs": "2.8.110"
   },
   "dependencies": {
     "@tailwindcss/ui": "^0.3.0",
