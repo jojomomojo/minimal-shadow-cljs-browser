@@ -64,6 +64,7 @@
 (def score (atom 0))                ; generates unique ids for each cell
 (def gameboard (atom (sorted-map))) ; gameboard is sorted to preserve cell order
 (def matched (atom #{}))            ; numbers that have been matched
+(def clicked (atom #{}))            ; numbers that have been clicked
 (def selected (atom nil))           ; cell that was last selected
 (def highlighted (atom #{}))        ; cells that are highlighted
 
@@ -87,6 +88,12 @@
   (and (= (/ (count @gameboard) 2) (count @matched))
        (not= (count @matched) 0)))
 
+(defn cheated?
+  []
+  ; game is cheated when count of clicks is less than half of gameboard
+  (not (and (= (/ (count @gameboard) 2) (count @clicked))
+       (not= (count @clicked) 0))))
+
 (defn win-game
   []
   (doseq [cell (range 1 9)]
@@ -109,6 +116,7 @@
   (reset! gameboard (sorted-map))
   (reset! selected nil)
   (reset! matched #{})
+  (reset! clicked #{})
   (reset! highlighted #{})
   ; take two sets of numbers (1..8) and randomize their order, then add them as
   ; cells
@@ -129,7 +137,8 @@
   [{:keys [number]}]                     ; ensures two more cells are colored via match
   (reset! selected nil)                  ; dont select anything
   (reset! highlighted #{})               ; dont highlight anything
-  (swap! matched conj number))           ; mark number as matched
+  (swap! matched conj number)            ; mark number as matched
+  (swap! clicked conj number))           ; mark number as clicked
 
 (defn winning-click?
   [{:keys [number id]}]
@@ -212,7 +221,9 @@
 
        ; win status
        (if (won-game?)
-         [:h2 {:class "px-5 py-5 text-lg leading-6 font-medium text-gray-900"} "You won!!!"])
+         [:h2 {:class "px-5 py-5 text-lg leading-6 font-medium text-gray-900"} 
+          (if (cheated?) "You cheating bastard" "You won!")])
+
        ])))
 
 ;-- main ---------------------------------------------------------------------------
