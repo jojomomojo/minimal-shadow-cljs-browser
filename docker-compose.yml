@@ -22,3 +22,12 @@ services:
       - ./release:/usr/share/nginx/html
     ports:
       - 80
+  cloudflared:
+    image: defn/home:${HOME_VARIANT:-latest}
+    restart: always
+    entrypoint: [ "/service" ]
+    command: [ "cloudflared" ]
+    volumes:
+      - ./etc/cloudflared:/etc/cloudflared
+    links:
+      - a
