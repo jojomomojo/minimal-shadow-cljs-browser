@@ -21,7 +21,7 @@ init:
 	docker-compose exec -w /app/src/work/app app ../../env make install
 
 install:
-	npm install
+	npm ci
 	$(MAKE) static
 
 app-watch:
