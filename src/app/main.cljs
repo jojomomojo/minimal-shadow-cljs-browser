@@ -53,7 +53,7 @@
       ]])
 
 (defn bump []
-  (rf/dispatch [:increment2]))
+  (rf/dispatch [:increment]))
 
 ;-- the memtest game ---------------------------------------------------------------------------
 
@@ -222,7 +222,9 @@
        ; win status
        (if (won-game?)
          [:h2 {:class "px-5 py-5 text-lg leading-6 font-medium text-gray-900"} 
-          (if (cheated?) "You cheating bastard" "You won!")])
+          (if (cheated?) 
+            (do (bump) "You cheating bastard") 
+            "You won!")])
 
        ])))
 
@@ -265,3 +267,10 @@
 
 (comment
   (bump))
+
+(comment
+  (win-game))
+
+(comment
+  (new-game))
+
