@@ -19,6 +19,7 @@ init:
 	docker-compose up -d
 	docker-compose exec app make fixroot 2>/dev/null 1>/dev/null || true
 	docker-compose exec -w /app/src/work/app app ../../env make install
+	$(MAKE) watch
 
 install:
 	npm ci
