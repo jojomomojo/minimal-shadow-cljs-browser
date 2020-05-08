@@ -27,8 +27,6 @@
                       cider.nrepl/wrap-xref
                       refactor-nrepl.middleware/wrap-refactor
                       iced.nrepl/wrap-iced]}
- :ssl {}
-
  :http {:port 9630}
 
  :dev-http {8080 {:roots ["target/", "src/html"]}}
@@ -39,7 +37,8 @@
                 :compiler-options {:optimizations :none}
                 :modules {:main {:init-fn app.main/main!}}
                 :devtools {:repl-init-ns app.main
-                           :repl-pprint true}}
+                           :repl-pprint true
+                           :devtools-url "https://repl.whoa.bot"}}
           :app-release {:target :browser
                         :output-dir "release"
                         :asset-path "."

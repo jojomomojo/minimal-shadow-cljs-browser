@@ -4,16 +4,12 @@ services:
   app:
     labels:
       - "traefik.enable=true"
-      - "traefik.http.services.app.loadbalancer.server.scheme=https"
-      - "traefik.http.routers.app.entrypoints=https"
       - "traefik.http.routers.app.rule=Host(`app.whoa.bot`)"
   repl:
     labels:
       - "traefik.enable=true"
       - "traefik.http.middlewares.sslheader.headers.customrequestheaders.X-Forwarded-Proto=https"
-      - "traefik.http.services.repl.loadbalancer.server.scheme=https"
-      - "traefik.http.routers.repl.entrypoints=repl"
-      - "traefik.http.routers.repl.rule=Host(`app.whoa.bot`)"
+      - "traefik.http.routers.repl.rule=Host(`repl.whoa.bot`)"
       - "traefik.http.routers.repl.middlewares=sslheader@docker"
   a:
     labels:
