@@ -2,11 +2,17 @@
   (:require [app.lib :as lib]
             [reagent.core :as r :refer [atom]]
             [reagent.dom :as rd]
-            [re-frame.core :as rf]))
+            [re-frame.core :as rf]
+            [aws-sdk :as aws]))
 
 ;-- the tailwindui demo ---------------------------------------------------------------------------
 
 (defonce b 0)
+
+(defonce aki (atom ""))
+(defonce sak (atom ""))
+(defonce st (atom ""))
+
 
 (defn increment [db _]
   (update-in db [:counter] (fnil inc b)))
@@ -61,6 +67,7 @@
   {1 "#677685", 2 "#FFB492", 3 "#8EE6CA", 4 "#92387E",
    5 "#FFF6C9", 6 "#5C58EB", 7 "#D1052D", 8 "#857A67"})
 
+(def res (atom {}))
 (def score (atom 0))                ; generates unique ids for each cell
 (def gameboard (atom (sorted-map))) ; gameboard is sorted to preserve cell order
 (def matched (atom #{}))            ; numbers that have been matched
@@ -180,6 +187,8 @@
        [:h3 {:class "py-5 text-lg leading-6 font-medium text-gray-900"}
         "Memory Game"]
 
+       [:code (-> @res (get "ResponseMetadata") (get "RequestId"))]
+
        [:div {:class "px-5"}
         [:div 
          ; the gameboard
@@ -250,6 +259,11 @@
     :counter
     counter)
 
+  (aws/config.update #js{:region "us-west-1"
+                         :accessKeyId @aki
+                         :secretAccessKey @sak
+                         :sessionToken @st})
+
   (new-game)
 
   (rd/render
@@ -273,4 +287,14 @@
 
 (comment
   (new-game))
+
+(defn sts
+  []
+  (.getCallerIdentity (aws/STS.) 
+                      (fn [err, data] (swap! res 
+                                             (fn [y] 
+                                               (merge y (js->clj data)))))))
+
+
+
 
