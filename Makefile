@@ -11,6 +11,7 @@ copy:
 sync:
 	rsync -ia --blocking-io -e "docker-compose exec -T app" \
 		--exclude target --exclude release --exclude node_modules --exclude .shadow-cljs \
+		--exclude .git \
 		env:work/. . -n
 
 watch:
