@@ -185,9 +185,11 @@
     (let [cells (vals @gameboard)]
       [:div {:class "px-10"}
        [:h3 {:class "py-5 text-lg leading-6 font-medium text-gray-900"}
-        "Memory Game"]
+        "Memory Game..."]
 
-       [:code (-> @res (get "ResponseMetadata") (get "RequestId"))]
+       [:div (str (js->clj @res))]
+
+       [:div (str (js->clj @err_))]
 
        [:div {:class "px-5"}
         [:div
@@ -251,7 +253,30 @@
      (swap! err_
             #(identity err))
      (swap! res
-            #(identity (js->clj data))))
+            #(identity data)))
+
+(defn sts
+  []
+  (.getCallerIdentity
+   (aws/STS.)
+   cb))
+
+(defn assume-role-oidc
+  [token]
+  (.assumeRoleWithWebIdentity
+   (aws/STS.)
+   (clj->js { "RoleArn" "arn:aws:iam::844609041254:role/fogg_circus_cljs"
+              "RoleSessionName" "app1", 
+              "WebIdentityToken" token})
+   #(if %2 (sts))))
+
+(defn get-oidc-token
+  []
+  (.getOpenIdToken
+   (aws/CognitoIdentity.)
+   (clj->js {"IdentityId" aws/config.credentials.identityId
+             "Logins" {user-pool-id (id-token)}})
+   (fn [e, d] (if d (assume-role-oidc (aget d "Token"))))))
 
 (defn aws-config
   []
@@ -264,38 +289,9 @@
                                                    "Logins" {user-pool-id (id-token)}})))
   (aset aws/config.credentials
         "expired"
-        (clj->js true)))
-
-(defn sts
-  []
-  (.getCallerIdentity
-   (aws/STS.)
-   cb))
-
-(defn cid
-  []
-  (.getCredentialsForIdentity
-   (aws/CognitoIdentity.)
-   (clj->js {"IdentityId" aws/config.credentials.identityId
-             "Logins" {user-pool-id (id-token)}})
-   cb))
-
-(defn get-oidc-token
-  []
-  (.getOpenIdToken
-   (aws/CognitoIdentity.)
-   (clj->js {"IdentityId" aws/config.credentials.identityId
-             "Logins" {user-pool-id (id-token)}})
-   cb))
-
-(defn assume-role-oidc
-  []
-  (.assumeRoleWithWebIdentity
-   (aws/STS.)
-   (clj->js { "RoleArn" "arn:aws:iam::844609041254:role/fogg_circus_cljs"
-              "RoleSessionName" "app1", 
-              "WebIdentityToken" (get @res "Token")})
-   cb))
+        (clj->js true))
+  
+  (get-oidc-token))
 
 (defn ^:dev/after-load reload! []
   (rf/reg-event-db
