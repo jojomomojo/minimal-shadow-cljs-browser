@@ -280,6 +280,23 @@
              "Logins" {user-pool-id (id-token)}})
    cb))
 
+(defn get-oidc-token
+  []
+  (.getOpenIdToken
+   (aws/CognitoIdentity.)
+   (clj->js {"IdentityId" aws/config.credentials.identityId
+             "Logins" {user-pool-id (id-token)}})
+   cb))
+
+(defn assume-role-oidc
+  []
+  (.assumeRoleWithWebIdentity
+   (aws/STS.)
+   (clj->js { "RoleArn" "arn:aws:iam::844609041254:role/fogg_circus_cljs"
+              "RoleSessionName" "app1", 
+              "WebIdentityToken" (get @res "Token")})
+   cb))
+
 (defn ^:dev/after-load reload! []
   (rf/reg-event-db
    :increment
