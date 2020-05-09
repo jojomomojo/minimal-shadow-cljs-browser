@@ -4,17 +4,19 @@ services:
   app:
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.app.rule=Host(`app.whoa.bot`)"
+      - "traefik.http.routers.app.rule=Host(`app.defn.sh`)"
   repl:
     labels:
       - "traefik.enable=true"
       - "traefik.http.middlewares.sslheader.headers.customrequestheaders.X-Forwarded-Proto=https"
-      - "traefik.http.routers.repl.rule=Host(`repl.whoa.bot`)"
-      - "traefik.http.routers.repl.middlewares=sslheader@docker"
+      - "traefik.http.middlewares.striprepl.stripprefix.prefixes=/repl"
+      - "traefik.http.middlewares.striprepl.stripprefix.forceslash=false"
+      - "traefik.http.routers.repl.rule=Host(`app.defn.sh`) && PathPrefix(`/repl`)"
+      - "traefik.http.routers.repl.middlewares=sslheader@docker,striprepl@docker"
   a:
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.a.rule=Host(`a.whoa.bot`)"
+      - "traefik.http.routers.a.rule=Host(`app.whoa.bot`)"
 
 networks:
   default:

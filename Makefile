@@ -1,25 +1,44 @@
 .PHONY: release
 
+doit:
+	$(MAKE) watch
+
+copy:
+	rsync -ia --blocking-io -e "docker-compose exec -T app" \
+		--exclude target --exclude release --exclude node_modules --exclude .shadow-cljs \
+		. env:work
+
+sync:
+	rsync -ia --blocking-io -e "docker-compose exec -T app" \
+		--exclude target --exclude release --exclude node_modules --exclude .shadow-cljs \
+		env:work/. . -n
+
 watch:
-	@docker-compose exec -w /app/src/work/app app ../../env make app-watch
+	@docker-compose exec -T -w /app/src/work app ../env make app-watch
 
 repl:
-	@docker-compose exec -w /app/src/work/app app ../../env make app-repl
+	@docker-compose exec -w /app/src/work app ../env make app-repl
 
 release:
-	@docker-compose exec -w /app/src/work/app app ../../env make app-release
+	@docker-compose exec -w /app/src/work app ../env make app-release
+	@rsync -ia --blocking-io -e "docker-compose exec -T app" \
+		--exclude target --exclude release --exclude node_modules --exclude .shadow-cljs \
+		env:work/release/. release/.
 
 clean:
 	rm -rf node_modules
-	rm -rf target
+	rm -rf target release
 	rm -rf .shadow-cljs
 
 init:
+	$(MAKE) clean
 	docker-compose down || true
 	docker-compose up -d
+	docker-compose exec app sudo chown app:app /app/src/.m2 /app/src/work
+	$(MAKE) copy
 	docker-compose exec app make fixroot 2>/dev/null 1>/dev/null || true
-	docker-compose exec -w /app/src/work/app app ../../env make install
-	$(MAKE) watch
+	docker-compose exec -w /app/src/work app ../env make install
+	$(MAKE) doit
 
 install:
 	npm ci
@@ -30,6 +49,7 @@ app-watch:
 
 app-release:
 	rm -rf release/*
+	mkdir -p release
 	env NODE_ENV=production $(MAKE) static-release
 	./node_modules/.bin/shadow-cljs release app-release
 
@@ -69,4 +89,10 @@ fixos:
 	@echo sudo xcode-select --switch /Library/Developer/CommandLineTools
 
 bash:
-	@docker-compose exec -w /app/src/work/app app ../../env bash
+	@docker-compose exec -w /app/src/work app ../env bash
+
+login:
+	aws-okta exec fogg-security -- bash -c \
+		'jq -n --arg aki "$${AWS_ACCESS_KEY_ID}" --arg sak "$${AWS_SECRET_ACCESS_KEY}" --arg st "$${AWS_SECURITY_TOKEN}" \
+			"{aki: \$$aki, sak: \$$sak, st: \$$st}"' \
+		| jq -r '"(aws-config \"\(.aki)\" \"\(.sak)\" \"\(.st)\")"' | pbcopy

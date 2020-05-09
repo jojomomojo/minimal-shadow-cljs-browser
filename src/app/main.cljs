@@ -13,7 +13,6 @@
 (defonce sak (atom ""))
 (defonce st (atom ""))
 
-
 (defn increment [db _]
   (update-in db [:counter] (fnil inc b)))
 
@@ -33,30 +32,29 @@
   []
   [:div {:class "px-10 py-10"}
    [:h3 {:class "text-lg leading-6 font-medium text-gray-900"}
-      "Last 30 days"]
-    [:div {:class "mt-5 grid grid-cols-1 gap-5 sm:grid-cols-3"}
-      [:div {:class "bg-white overflow-hidden shadow rounded-lg"}
-       [:div {:class "px-4 py-5 sm:p-6"}
-        [:dl
-          [:dt {:class "text-sm leading-5 font-medium text-gray-500 truncate"} 
-            "Total Subscribers"]
-          [:dd {:class "mt-1 text-3xl leading-9 font-semibold text-gray-900"} 
-            @(rf/subscribe [:counter])]]]]
-      [:div {:class "bg-white overflow-hidden shadow rounded-lg"}
-       [:div {:class "px-4 py-5 sm:p-6"}
-        [:dl
-          [:dt {:class "text-sm leading-5 font-medium text-gray-500 truncate"} 
-            "Total Subscribers"]
-          [:dd {:class "mt-1 text-3xl leading-9 font-semibold text-gray-900"} 
-            @(rf/subscribe [:counter])]]]]
-      [:div {:class "bg-white overflow-hidden shadow rounded-lg"}
-       [:div {:class "px-4 py-5 sm:p-6"}
-        [:dl
-          [:dt {:class "text-sm leading-5 font-medium text-gray-500 truncate"} 
-            "Total Subscribers"]
-          [:dd {:class "mt-1 text-3xl leading-9 font-semibold text-gray-900"} 
-            @(rf/subscribe [:counter])]]]]
-      ]])
+    "Last 30 days"]
+   [:div {:class "mt-5 grid grid-cols-1 gap-5 sm:grid-cols-3"}
+    [:div {:class "bg-white overflow-hidden shadow rounded-lg"}
+     [:div {:class "px-4 py-5 sm:p-6"}
+      [:dl
+       [:dt {:class "text-sm leading-5 font-medium text-gray-500 truncate"}
+        "Total Subscribers"]
+       [:dd {:class "mt-1 text-3xl leading-9 font-semibold text-gray-900"}
+        @(rf/subscribe [:counter])]]]]
+    [:div {:class "bg-white overflow-hidden shadow rounded-lg"}
+     [:div {:class "px-4 py-5 sm:p-6"}
+      [:dl
+       [:dt {:class "text-sm leading-5 font-medium text-gray-500 truncate"}
+        "Total Subscribers"]
+       [:dd {:class "mt-1 text-3xl leading-9 font-semibold text-gray-900"}
+        @(rf/subscribe [:counter])]]]]
+    [:div {:class "bg-white overflow-hidden shadow rounded-lg"}
+     [:div {:class "px-4 py-5 sm:p-6"}
+      [:dl
+       [:dt {:class "text-sm leading-5 font-medium text-gray-500 truncate"}
+        "Total Subscribers"]
+       [:dd {:class "mt-1 text-3xl leading-9 font-semibold text-gray-900"}
+        @(rf/subscribe [:counter])]]]]]])
 
 (defn bump []
   (rf/dispatch [:increment]))
@@ -68,6 +66,7 @@
    5 "#FFF6C9", 6 "#5C58EB", 7 "#D1052D", 8 "#857A67"})
 
 (def res (atom {}))
+(def err_ (atom {}))
 (def score (atom 0))                ; generates unique ids for each cell
 (def gameboard (atom (sorted-map))) ; gameboard is sorted to preserve cell order
 (def matched (atom #{}))            ; numbers that have been matched
@@ -99,12 +98,12 @@
   []
   ; game is cheated when count of clicks is less than half of gameboard
   (not (and (= (/ (count @gameboard) 2) (count @clicked))
-       (not= (count @clicked) 0))))
+            (not= (count @clicked) 0))))
 
 (defn win-game
   []
   (doseq [cell (range 1 9)]
-   (swap! matched conj cell)))
+    (swap! matched conj cell)))
 
 (defn add-cell [n]
   ; add a numbered cell with a unique id
@@ -155,10 +154,10 @@
 (defn handle-click
   [{:keys [number id] :as cell}]
   (cond
-   (= @selected cell) (reset! selected nil) ; reset if selected cell is selected again
-   (nil? @selected) (select-cell cell)      ; set as selected if nothing was selected
-   (winning-click? cell) (win-cell cell)    ; mark as won if click is a winner
-   :else (lose-cell cell)))                 ; else mark as lost
+    (= @selected cell) (reset! selected nil) ; reset if selected cell is selected again
+    (nil? @selected) (select-cell cell)      ; set as selected if nothing was selected
+    (winning-click? cell) (win-cell cell)    ; mark as won if click is a winner
+    :else (lose-cell cell)))                 ; else mark as lost
 
 (defn highlighted?
   [cell]
@@ -190,17 +189,17 @@
        [:code (-> @res (get "ResponseMetadata") (get "RequestId"))]
 
        [:div {:class "px-5"}
-        [:div 
+        [:div
          ; the gameboard
          [:div {:class "py-5"}
           [:table#gameboard [:tbody
                              ; taking 4 cells at a time for each row
                              (map-indexed
-                               (fn [idx row] ^{:key idx} [board-row row])
-                               (partition 4 cells))]]]
+                              (fn [idx row] ^{:key idx} [board-row row])
+                              (partition 4 cells))]]]
          ; the buttons
          [:span {:class "relative z-0 inline-flex shadow-sm"}
-          [:button {:type "button" 
+          [:button {:type "button"
                     :on-click #(new-game)
                     :href "#"
                     :class "
@@ -224,77 +223,73 @@
                            focus:border-blue-300 focus:shadow-outline-blue
                            active:bg-gray-100 active:text-gray-700 transition
                            ease-in-out duration-150"}
-           "Cheat"]]
-
-         ]]
+           "Cheat"]]]]
 
        ; win status
-       (if (won-game?)
-         [:h2 {:class "px-5 py-5 text-lg leading-6 font-medium text-gray-900"} 
-          (if (cheated?) 
-            (do (bump) "You cheating bastard") 
-            "You won!")])
 
-       ])))
+
+       (if (won-game?)
+         [:h2 {:class "px-5 py-5 text-lg leading-6 font-medium text-gray-900"}
+          (if (cheated?)
+            (do (bump) "You cheating bastard")
+            "You won!")])])))
 
 ;-- main ---------------------------------------------------------------------------
+
+
 (defn ^:dev/after-load reload! []
   (rf/reg-event-db
-    :increment
-    increment)
+   :increment
+   increment)
 
   (rf/reg-event-db
-    :increment2
-    increment2)
+   :increment2
+   increment2)
 
   (rf/reg-event-db
-    :decrement
-    decrement)
+   :decrement
+   decrement)
 
   (rf/reg-event-db
-    :reset
-    reset)
+   :reset
+   reset)
 
   (rf/reg-sub
-    :counter
-    counter)
-
-  (aws/config.update #js{:region "us-west-1"
-                         :accessKeyId @aki
-                         :secretAccessKey @sak
-                         :sessionToken @st})
+   :counter
+   counter)
 
   (new-game)
 
   (rd/render
-    [counter-view]
-    (js/document.getElementById "app"))
+   [counter-view]
+   (js/document.getElementById "app"))
 
   (rd/render
-    [memtest-view]
-    (js/document.getElementById "game")))
+   [memtest-view]
+   (js/document.getElementById "game")))
 
 (defn main! []
   (println "[main]: loading")
 
   (reload!))
 
-(comment
-  (bump))
-
-(comment
-  (win-game))
-
-(comment
-  (new-game))
+(defn aws-config
+  [ak sk stn]
+  (swap! aki #(identity ak))
+  (swap! sak #(identity sk))
+  (swap! st #(identity stn))
+  (aws/config.update
+   #js{:region "us-west-1"
+       :accessKeyId @aki
+       :secretAccessKey @sak
+       :sessionToken @st}))
 
 (defn sts
   []
-  (.getCallerIdentity (aws/STS.) 
-                      (fn [err, data] (swap! res 
-                                             (fn [y] 
-                                               (merge y (js->clj data)))))))
-
-
-
-
+  (.getCallerIdentity
+   (aws/STS.)
+   (fn [err, data]
+     (swap! err_
+            #(identity err))
+     (swap! res
+            #(identity (js->clj data))))))

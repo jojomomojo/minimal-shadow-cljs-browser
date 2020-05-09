@@ -1,11 +1,12 @@
 version: '3.7'
+
 services:
   app:
     image: defn/home
     entrypoint: [ "sleep", "86400000" ]
     volumes:
-      - .:/app/src/work/app
-      - ${HOME}/.m2:/app/src/.m2
+      - cache:/app/src/.m2
+      - work:/app/src/work
     ports:
       - 8080
   repl:
@@ -24,10 +25,15 @@ services:
       - 80
   cloudflared:
     image: defn/home:${HOME_VARIANT:-latest}
+    entrypoint: [ "/usr/local/bin/cloudflared" ]
+    command: [ "--no-autoupdate", "tunnel" ]
     restart: always
-    entrypoint: [ "/service" ]
-    command: [ "cloudflared" ]
     volumes:
-      - ./etc/cloudflared:/etc/cloudflared
-    links:
-      - a
+      - ${HOME}/.cloudflared:/etc/cloudflared
+    environment:
+      - TUNNEL_URL=https://traefik.whoa.bot
+      - TUNNEL_HOSTNAME=app.defn.sh
+
+volumes:
+  work:
+  cache:
