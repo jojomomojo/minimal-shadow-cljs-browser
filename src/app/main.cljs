@@ -3,7 +3,8 @@
             [reagent.core :as r :refer [atom]]
             [reagent.dom :as rd]
             [re-frame.core :as rf]
-            [aws-sdk :as aws]))
+            [aws-sdk :as aws]
+            [clojure.string :refer [split]]))
 
 ;-- the tailwindui demo ---------------------------------------------------------------------------
 
@@ -235,7 +236,49 @@
             "You won!")])])))
 
 ;-- main ---------------------------------------------------------------------------
+(def identity-pool-id
+  "us-west-2:33612cb4-5d92-45c3-a4e9-f1f45cc70625")
 
+(def user-pool-id
+  "cognito-idp.us-west-2.amazonaws.com/us-west-2_X0vt0G7r4")
+
+(defn id-token
+  []
+  (nth (split (nth (split (nth (split js/document.location.href "#") 1) "&") 0) "=") 1))
+
+(defn cb
+  [err, data]
+     (swap! err_
+            #(identity err))
+     (swap! res
+            #(identity (js->clj data))))
+
+(defn aws-config
+  []
+  (aset aws/config
+        "region"
+        "us-west-2")
+  (aset aws/config
+        "credentials"
+        (aws/CognitoIdentityCredentials. (clj->js {"IdentityPoolId" identity-pool-id
+                                                   "Logins" {user-pool-id (id-token)}})))
+  (aset aws/config.credentials
+        "expired"
+        (clj->js true)))
+
+(defn sts
+  []
+  (.getCallerIdentity
+   (aws/STS.)
+   cb))
+
+(defn cid
+  []
+  (.getCredentialsForIdentity
+   (aws/CognitoIdentity.)
+   (clj->js {"IdentityId" aws/config.credentials.identityId
+             "Logins" {user-pool-id (id-token)}})
+   cb))
 
 (defn ^:dev/after-load reload! []
   (rf/reg-event-db
@@ -258,6 +301,8 @@
    :counter
    counter)
 
+  (aws-config)
+
   (new-game)
 
   (rd/render
@@ -272,24 +317,3 @@
   (println "[main]: loading")
 
   (reload!))
-
-(defn aws-config
-  [ak sk stn]
-  (swap! aki #(identity ak))
-  (swap! sak #(identity sk))
-  (swap! st #(identity stn))
-  (aws/config.update
-   #js{:region "us-west-1"
-       :accessKeyId @aki
-       :secretAccessKey @sak
-       :sessionToken @st}))
-
-(defn sts
-  []
-  (.getCallerIdentity
-   (aws/STS.)
-   (fn [err, data]
-     (swap! err_
-            #(identity err))
-     (swap! res
-            #(identity (js->clj data))))))
