@@ -12,7 +12,7 @@ sync:
 	rsync -ia --blocking-io -e "docker-compose exec -T app" \
 		--exclude target --exclude release --exclude node_modules --exclude .shadow-cljs \
 		--exclude .git \
-		env:work/. . -n
+		env:work/. .
 
 watch:
 	@docker-compose exec -T -w /app/src/work app ../env make app-watch
