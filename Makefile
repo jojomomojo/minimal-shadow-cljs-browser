@@ -32,6 +32,7 @@ clean:
 	rm -rf .shadow-cljs
 
 init:
+	npm install
 	docker-compose down || true
 	docker-compose up -d
 	docker-compose exec app sudo chown app:app /app/src/.m2 /app/src/work
