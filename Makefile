@@ -36,7 +36,7 @@ init:
 	docker-compose up -d
 	docker-compose exec app sudo chown app:app /app/src/.m2 /app/src/work
 	$(MAKE) copy
-	docker-compose exec -w /app/src/work app ../env make install
+	docker-compose exec -w /app/src/work app ../env make clean install
 	$(MAKE) doit
 
 install:
