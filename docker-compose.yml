@@ -27,7 +27,7 @@ services:
     image: letfn/cloudflared
     restart: always
     volumes:
-      - ./etc/cloudflared:/etc/cloudflared
+      - ${HOME}/.cloudflared:/etc/cloudflared
     environment:
       - TUNNEL_URL=https://traefik.whoa.bot
       - TUNNEL_HOSTNAME=app.defn.sh

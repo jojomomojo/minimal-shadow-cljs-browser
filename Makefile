@@ -32,12 +32,10 @@ clean:
 	rm -rf .shadow-cljs
 
 init:
-	$(MAKE) clean
 	docker-compose down || true
 	docker-compose up -d
 	docker-compose exec app sudo chown app:app /app/src/.m2 /app/src/work
 	$(MAKE) copy
-	docker-compose exec app make fixroot 2>/dev/null 1>/dev/null || true
 	docker-compose exec -w /app/src/work app ../env make install
 	$(MAKE) doit
 
