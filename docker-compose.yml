@@ -23,14 +23,6 @@ services:
       - ./release:/usr/share/nginx/html
     ports:
       - 80
-  cloudflared:
-    image: letfn/cloudflared
-    restart: always
-    volumes:
-      - ${HOME}/.cloudflared:/etc/cloudflared
-    environment:
-      - TUNNEL_URL=https://traefik.whoa.bot
-      - TUNNEL_HOSTNAME=app.defn.sh
 
 volumes:
   work:
