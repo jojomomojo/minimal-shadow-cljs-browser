@@ -79,9 +79,6 @@ html-release:
 	mkdir -p release
 	rsync -ia src/html/. release/.
 
-serve:
-	cd target && sudo "$(shell which caddy)" file-server
-
 fixos:
 	@echo run manually:
 	@echo sudo rm -r -f /Library/Developer/CommandLineTools
@@ -90,9 +87,3 @@ fixos:
 
 bash:
 	@docker-compose exec -w /app/src/work app ../env bash
-
-login:
-	aws-okta exec fogg-security -- bash -c \
-		'jq -n --arg aki "$${AWS_ACCESS_KEY_ID}" --arg sak "$${AWS_SECRET_ACCESS_KEY}" --arg st "$${AWS_SECURITY_TOKEN}" \
-			"{aki: \$$aki, sak: \$$sak, st: \$$st}"' \
-		| jq -r '"(aws-config \"\(.aki)\" \"\(.sak)\" \"\(.st)\")"' | pbcopy
