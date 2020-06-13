@@ -5,6 +5,7 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.app.rule=Host(`app.defn.sh`)"
+      - "traefik.http.services.app.loadbalancer.server.port=8080"
   repl:
     labels:
       - "traefik.enable=true"
@@ -13,10 +14,12 @@ services:
       - "traefik.http.middlewares.striprepl.stripprefix.forceslash=false"
       - "traefik.http.routers.repl.rule=Host(`app.defn.sh`) && PathPrefix(`/repl`)"
       - "traefik.http.routers.repl.middlewares=sslheader@docker,striprepl@docker"
+      - "traefik.http.services.repl.loadbalancer.server.port=9630"
   a:
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.a.rule=Host(`app.whoa.bot`)"
+      - "traefik.http.services.a.loadbalancer.server.port=80"
 
 networks:
   default:

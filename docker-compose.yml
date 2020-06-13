@@ -7,22 +7,16 @@ services:
     volumes:
       - cache:/app/src/.m2
       - work:/app/src/work
-    ports:
-      - 8080
   repl:
     image: defn/home
     restart: always
     entrypoint: [ "socat", "tcp-listen:9630,reuseaddr,fork", "tcp:app:9630" ]
-    ports:
-      - 9630
     links:
       - app
   a:
     image: nginx
     volumes:
       - ./release:/usr/share/nginx/html
-    ports:
-      - 80
 
 volumes:
   work:
