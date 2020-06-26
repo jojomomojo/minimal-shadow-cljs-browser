@@ -7,17 +7,42 @@ services:
     volumes:
       - cache:/app/src/.m2
       - work:/app/src/work
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.app.entrypoints=https"
+      - "traefik.http.routers.app.rule=Host(`app.defn.sh`)"
+      - "traefik.http.services.app.loadbalancer.server.port=8080"
   repl:
     image: defn/home
     restart: always
     entrypoint: [ "socat", "tcp-listen:9630,reuseaddr,fork", "tcp:app:9630" ]
     links:
       - app
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.middlewares.sslheader.headers.customrequestheaders.X-Forwarded-Proto=https"
+      - "traefik.http.middlewares.striprepl.stripprefix.prefixes=/repl"
+      - "traefik.http.middlewares.striprepl.stripprefix.forceslash=false"
+      - "traefik.http.routers.repl.entrypoints=https"
+      - "traefik.http.routers.repl.rule=Host(`app.defn.sh`) && PathPrefix(`/repl`)"
+      - "traefik.http.routers.repl.middlewares=sslheader@docker,striprepl@docker"
+      - "traefik.http.services.repl.loadbalancer.server.port=9630"
   a:
     image: nginx
     volumes:
       - ./release:/usr/share/nginx/html
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.a.entrypoints=https"
+      - "traefik.http.routers.a.rule=Host(`app.whoa.bot`)"
+      - "traefik.http.services.a.loadbalancer.server.port=80"
 
 volumes:
   work:
   cache:
+version: '3.7'
+
+networks:
+  default:
+    external:
+      name: kitt
