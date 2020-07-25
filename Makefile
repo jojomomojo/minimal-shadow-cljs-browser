@@ -1,6 +1,17 @@
 .PHONY: release
 
-doit:
+repl:
+	@docker-compose exec -w /app/src/work app ../env make app-repl
+
+watch:
+	@docker-compose exec -T -w /app/src/work app ../env make app-watch
+
+init:
+	npm install
+	kitt recreate
+	docker-compose exec app sudo chown app:app /app/src/.m2 /app/src/work
+	$(MAKE) copy
+	docker-compose exec -w /app/src/work app ../env make clean install
 	$(MAKE) watch
 
 copy:
@@ -14,12 +25,6 @@ sync:
 		--exclude .git \
 		env:work/. .
 
-watch:
-	@docker-compose exec -T -w /app/src/work app ../env make app-watch
-
-repl:
-	@docker-compose exec -w /app/src/work app ../env make app-repl
-
 release:
 	@docker-compose exec -w /app/src/work app ../env make app-release
 	@rsync -ia --blocking-io -e "docker-compose exec -T app" \
@@ -31,14 +36,6 @@ clean:
 	rm -rf target release
 	rm -rf .shadow-cljs
 
-init:
-	npm install
-	docker-compose down || true
-	docker-compose up -d
-	docker-compose exec app sudo chown app:app /app/src/.m2 /app/src/work
-	$(MAKE) copy
-	docker-compose exec -w /app/src/work app ../env make clean install
-	$(MAKE) doit
 
 install:
 	npm ci
