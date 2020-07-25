@@ -1,14 +1,14 @@
 {:source-paths ["src"]
 
  :dependencies
- [[reagent "0.10.0"]
-  [re-frame "0.12.0"]
+ [[reagent "1.0.0-alpha2"]
+  [re-frame "1.0.0"]
 
   [binaryage/devtools "1.0.2"]
 
   [refactor-nrepl "2.5.0"]
   [cider/cider-nrepl "0.25.2"]
-  [iced-nrepl "1.0.2"]]
+  [iced-nrepl "1.0.4"]]
 
  :nrepl {:cider false
          :middleware [cider.nrepl/wrap-classpath
