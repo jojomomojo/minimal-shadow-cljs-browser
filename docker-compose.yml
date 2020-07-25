@@ -11,7 +11,7 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.app.entrypoints=https"
-      - "traefik.http.routers.app.rule=Host(`app.defn.sh`)"
+      - "traefik.http.routers.app.rule=Host(`app.${KITT_DOMAIN}`)"
       - "traefik.http.services.app.loadbalancer.server.port=8080"
   repl:
     image: defn/home
@@ -25,7 +25,7 @@ services:
       - "traefik.http.middlewares.striprepl.stripprefix.prefixes=/repl"
       - "traefik.http.middlewares.striprepl.stripprefix.forceslash=false"
       - "traefik.http.routers.repl.entrypoints=https"
-      - "traefik.http.routers.repl.rule=Host(`app.defn.sh`) && PathPrefix(`/repl`)"
+      - "traefik.http.routers.repl.rule=Host(`app.${KITT_DOMAIN}`) && PathPrefix(`/repl`)"
       - "traefik.http.routers.repl.middlewares=sslheader@docker,striprepl@docker"
       - "traefik.http.services.repl.loadbalancer.server.port=9630"
   a:
@@ -35,7 +35,7 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.a.entrypoints=https"
-      - "traefik.http.routers.a.rule=Host(`app.whoa.bot`)"
+      - "traefik.http.routers.a.rule=Host(`app.${KITT_DOMAIN}`)"
       - "traefik.http.services.a.loadbalancer.server.port=80"
 
 volumes:
