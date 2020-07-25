@@ -3,9 +3,10 @@ version: '3.7'
 services:
   app:
     image: defn/home
-    entrypoint: [ "sleep", "86400000" ]
+    entrypoint: [ "bash", "-c", "set -x; ln -nfs /cache/.npmrc .;  mkdir -p .pip; ln -nfs /cache/.pip/pip.conf .pip/; sleep 86400" ]
     volumes:
       - cache:/app/src/.m2
+      - ./cache:/cache
       - work:/app/src/work
     labels:
       - "traefik.enable=true"
