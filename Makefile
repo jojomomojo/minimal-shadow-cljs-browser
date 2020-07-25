@@ -3,16 +3,20 @@
 repl:
 	@docker-compose exec -w /app/src/work app ../env make app-repl
 
+recreate:
+	kitt recreate
+	$(MAKE) copy
+	docker-compose exec -w /app/src/work app ../env make install
+	$(MAKE) watch
+
+setup:
+	npm install
+	docker-compose exec app sudo chown app:app /app/src/.m2 /app/src/work
+	docker-compose exec -w /app/src/work app ../env make clean
+	$(MAKE) recreate
+
 watch:
 	@docker-compose exec -T -w /app/src/work app ../env make app-watch
-
-init:
-	npm install
-	kitt recreate
-	docker-compose exec app sudo chown app:app /app/src/.m2 /app/src/work
-	$(MAKE) copy
-	docker-compose exec -w /app/src/work app ../env make clean install
-	$(MAKE) watch
 
 copy:
 	rsync -ia --blocking-io -e "docker-compose exec -T app" \
